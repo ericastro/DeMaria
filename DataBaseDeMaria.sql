@@ -16,13 +16,10 @@ CREATE DATABASE "Cafeteria"
 
 -- DROP TABLE public."Capsulas";
 
-CREATE TABLE public."Capsulas"
-(
+CREATE TABLE public."Capsulas" (
+    capsulasID SERIAL PRIMARY KEY,
     descricao character varying(200) COLLATE pg_catalog."default" NOT NULL,
-    forca integer NOT NULL,
-    "CapsulasID" integer NOT NULL DEFAULT nextval('"Capsulas_CapsulasID_seq"'::regclass),
-    CONSTRAINT "Capsulas_pkey" PRIMARY KEY ("CapsulasID")
-)
+    forca integer NOT NULL )
 
 TABLESPACE pg_default;
 
@@ -36,13 +33,12 @@ GRANT ALL ON TABLE public."Capsulas" TO postgres WITH GRANT OPTION;
 
 -- DROP TABLE public."Estoque";
 
-CREATE TABLE public."Estoque"
+CREATE TABLE IF NOT EXISTS public."Estoque"
 (
     validade date NOT NULL,
     "dataEntrada" date NOT NULL,
     "dataSaida" date NOT NULL,
-    "capsulasID" integer NOT NULL DEFAULT nextval('"Estoque_capsulasID_seq"'::regclass),
-    CONSTRAINT "Estoque_pkey" PRIMARY KEY ("capsulasID")
+    "capsulasID" integer NOT NULL
 )
 
 TABLESPACE pg_default;
@@ -57,7 +53,7 @@ GRANT ALL ON TABLE public."Estoque" TO postgres WITH GRANT OPTION;
 
 -- DROP TABLE public."KitCapsulas";
 
-CREATE TABLE public."KitCapsulas"
+CREATE TABLE IF NOT EXISTS public."KitCapsulas"
 (
     "kitCapsulaID" integer NOT NULL,
     quantidade integer NOT NULL,
@@ -71,17 +67,14 @@ ALTER TABLE public."KitCapsulas"
 
 GRANT ALL ON TABLE public."KitCapsulas" TO postgres WITH GRANT OPTION;
 
-
-
 -- Table: public."KitSabor"
 
 -- DROP TABLE public."KitSabor";
 
-CREATE TABLE public."KitSabor"
+CREATE TABLE IF NOT EXISTS public."KitSabor"
 (
-    descricao character varying(200) COLLATE pg_catalog."default" NOT NULL,
-    "kitSaborID" integer NOT NULL DEFAULT nextval('"KitSabor_kitSaborID_seq"'::regclass),
-    CONSTRAINT "KitSabor_pkey" PRIMARY KEY ("kitSaborID")
+    kitSaborID SERIAL PRIMARY KEY,
+    descricao character varying(200) COLLATE pg_catalog."default" NOT NULL
 )
 
 TABLESPACE pg_default;
@@ -95,12 +88,11 @@ GRANT ALL ON TABLE public."KitSabor" TO postgres WITH GRANT OPTION;
 
 -- DROP TABLE public."Receitas";
 
-CREATE TABLE public."Receitas"
+CREATE TABLE IF NOT EXISTS public."Receitas"
 (
-    "receitaID" integer NOT NULL DEFAULT nextval('"Receita_ReceitaID_seq"'::regclass),
+    receitaID integer NOT NULL,
     descricao character varying(200) COLLATE pg_catalog."default" NOT NULL,
-    "kitSaborID" integer NOT NULL,
-    CONSTRAINT "Receita_pkey" PRIMARY KEY ("receitaID")
+    kitSaborID integer NOT NULL
 )
 
 TABLESPACE pg_default;
