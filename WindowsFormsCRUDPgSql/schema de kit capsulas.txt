@@ -1,0 +1,7 @@
+capuslas
+
+receitas ( KitSaborID )
+
+KitSabor ( descricao )
+
+KitItens ( KitSaborID, CapsulaID, qtde )
