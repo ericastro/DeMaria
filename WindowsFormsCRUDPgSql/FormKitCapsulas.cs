@@ -27,7 +27,7 @@ namespace WindowsFormsCRUDPgSql
             DataTable dtCapsulas = capsulas.ListarCapsulas();
             cbxTipoDeCapsulas.DataSource = dtCapsulas;
             cbxTipoDeCapsulas.DisplayMember = "Descricao";
-            cbxTipoDeCapsulas.ValueMember = "CapsulasID";
+            cbxTipoDeCapsulas.ValueMember = "capsulasID";
 
             KitCapsulas kitCapsulas = new KitCapsulas();
             DataTable dtKitCapsulas = kitCapsulas.ListarKitCapsulas();

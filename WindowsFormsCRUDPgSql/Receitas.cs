@@ -12,7 +12,7 @@ namespace WindowsFormsCRUDPgSql
     {
         public int ReceitaID { get; set; }
         public string Descricao { get; set; }
-        public List<int> ListaKitSaborID { get; set; }
+        public int LastInsertID { get; set; }
 
         public Receitas() { }
 
@@ -26,21 +26,21 @@ namespace WindowsFormsCRUDPgSql
                 using (NpgsqlConnection conn = new NpgsqlConnection(connectionPostgres.ConnString))
                 {
                     conn.Open();
+
                     NpgsqlCommand cmd = new NpgsqlCommand();
                     cmd.Connection = conn;
-
-                    foreach(var kitSaborID in ListaKitSaborID)
-                    {
-                        cmd.CommandText = "Insert into public.\"KitSabor\" values(@Descricao,@KitSaborID)";
-                        cmd.CommandType = CommandType.Text;
-                        cmd.Parameters.Add(new NpgsqlParameter("@Descricao", receita.Descricao));
-                        cmd.Parameters.Add(new NpgsqlParameter("@Forca", kitSaborID));
-                        cmd.ExecuteNonQuery();
-                    }
-
+                    cmd.CommandText = "Insert into public.\"KitSabor\" values(@Descricao)";
+                    cmd.CommandType = CommandType.Text;
+                    cmd.Parameters.Add(new NpgsqlParameter("@Descricao", receita.Descricao));
+                    cmd.ExecuteNonQuery();
+                    //RETORNA ULTIMO ID
+                    cmd.CommandText = "select \"kitSaborID\" from public.\"KitSabor\" ORDER BY \"kitSaborID\" DESC LIMIT 1";
+                    cmd.CommandType = CommandType.Text;
+                    LastInsertID = Convert.ToInt32(cmd.ExecuteScalar());
                     cmd.Dispose();
                     conn.Close();
                 }
+
             }
             catch (Exception ex)
             {
