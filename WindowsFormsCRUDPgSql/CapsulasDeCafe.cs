@@ -24,7 +24,6 @@ namespace WindowsFormsCRUDPgSql
             NpgsqlCommand cmd = new NpgsqlCommand(sql, conn);
             conn.Open();
             NpgsqlDataReader reader = cmd.ExecuteReader();
-
             dtCapsulas.Load(reader);
             conn.Close();
             return dtCapsulas;

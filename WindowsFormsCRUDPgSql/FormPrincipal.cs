@@ -15,29 +15,18 @@ namespace WindowsFormsCRUDPgSql
 
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void FormPrincipal_Shown(object sender, EventArgs e)
         {
-            ConnetionPostgres connectionPostgres = new ConnetionPostgres();
-            NpgsqlConnection conn = new NpgsqlConnection(connectionPostgres.ConnString);
-
-            string sql = "SELECT * FROM public.\"Capsulas\"";
-            NpgsqlCommand cmd;
-            DataTable dt;
-
             try
             {
-                conn.Open();
-                cmd = new NpgsqlCommand(sql, conn);
-                dt = new DataTable();
-                dt.Load(cmd.ExecuteReader());
-                dgvPrincipal.DataSource = null;
-                dgvPrincipal.DataSource = dt;
-                conn.Close();
+                    ConnetionPostgres connectionPostgres = new ConnetionPostgres();
+                    NpgsqlConnection conn = new NpgsqlConnection(connectionPostgres.ConnString);
+                    string sql = "SELECT * FROM public.\"Capsulas\"";
+                    NpgsqlCommand cmd;
+                    conn.Open();
+                    cmd = new NpgsqlCommand(sql, conn);
+                    cmd.ExecuteNonQuery();
+                    conn.Close();
             }
             catch (Exception)
             {
@@ -75,6 +64,17 @@ namespace WindowsFormsCRUDPgSql
         private void estoqueToolStripMenuItem_Click(object sender, EventArgs e)
         {
             FormControleDeEstoque form = new FormControleDeEstoque();
+            form.Show();
+        }
+
+        private void listarToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void fazerCaféToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            FormCafeteira form = new FormCafeteira();
             form.Show();
         }
     }

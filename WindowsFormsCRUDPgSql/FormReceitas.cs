@@ -19,6 +19,8 @@ namespace WindowsFormsCRUDPgSql
         {
             InitializeComponent();
             PreencheCbxKitSabor();
+            dt.Columns.Add("Id");
+            dt.Columns.Add("KitSabor");
         }
 
         private void PreencheCbxKitSabor()
@@ -32,20 +34,24 @@ namespace WindowsFormsCRUDPgSql
 
         private void btnSalvar_Click(object sender, EventArgs e)
         {
+            if(string.IsNullOrEmpty(tbxDescricao.Text))
+            {
+                MessageBox.Show("É preciso dar uma descrição para a receita!");
+                return;
+            }
+
             Receitas receita = new Receitas();
             receita.Descricao = tbxDescricao.Text;
-
             receita.InserirReceitas(receita);
 
             tbxReceitasID.Text = receita.LastInsertID.ToString();
 
+            btnSalvar.Visible = false;
             tbxDescricao.Enabled = false;
-            btnIncluir.Enabled = false;
+            btnIncluir.Enabled = true;
             cbxKitSabor.Enabled = true;
-
-            dt.Columns.Add("Id");
-            dt.Columns.Add("KitSabor");
             dgvReceita.DataSource = dt;
+            dgvReceita.Visible = true;
         }
 
         private void btnPesquisar_Click(object sender, EventArgs e)
@@ -56,17 +62,52 @@ namespace WindowsFormsCRUDPgSql
 
         private void btnFecharReceita_Click(object sender, EventArgs e)
         {
+            btnIncluir.Enabled = false;
+            btnIncluir.Visible = false;
+            cbxKitSabor.Enabled = false;
+            cbxKitSabor.Visible = false;
+            btnFecharReceita.Visible = false;
+            dgvReceita.Visible = false;
+            lblKitSabor.Visible = false;
 
+            tbxReceitasID.Text = string.Empty;
+            tbxDescricao.Text = string.Empty;
+            tbxDescricao.Enabled = true;
+            btnSalvar.Enabled = true;
+            btnSalvar.Visible = true;
+
+            dgvReceita.DataSource = dt;
         }
 
         private void btnIncluir_Click(object sender, EventArgs e)
         {
-            DataRow row = dt.NewRow();
-            row["Id"] = cbxKitSabor.SelectedIndex.ToString();
-            row["KitSabor"] = cbxKitSabor.Text.ToString();
-            dt.Rows.Add(row);
-            dgvReceita.DataSource = dt;
-            dgvReceita.Refresh();
+            ReceitaItem receitaItem = new ReceitaItem();
+            receitaItem.ReceitaID = Convert.ToUInt16(tbxReceitasID.Text);
+            receitaItem.KitSaborID = cbxKitSabor.SelectedIndex;
+            receitaItem.IncluirItensDaReceita(receitaItem);
+
+            string result = receitaItem.IncluirItensDaReceita(receitaItem);
+
+            if (result != "ok")
+            {
+                MessageBox.Show(result);
+            }
+            else
+            {
+                MessageBox.Show("Kit Sabor incluido na receita com sucesso!");
+
+                DataRow row = dt.NewRow();
+                row["Id"] = cbxKitSabor.SelectedIndex.ToString();
+                row["KitSabor"] = cbxKitSabor.Text.ToString();
+                dt.Rows.Add(row);
+                dgvReceita.DataSource = dt;
+                dgvReceita.Refresh();
+
+                //LimparTextBoxes();
+                //IncluirPesquisarMostraBotoes();
+                //DesabilitarCampos();
+            };
+
         }
     }
 }
